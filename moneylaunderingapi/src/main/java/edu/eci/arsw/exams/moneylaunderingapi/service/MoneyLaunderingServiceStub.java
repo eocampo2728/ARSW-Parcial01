@@ -4,26 +4,27 @@ import edu.eci.arsw.exams.moneylaunderingapi.model.SuspectAccount;
 import java.util.ArrayList;
 
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class MoneyLaunderingServiceStub implements MoneyLaunderingService {
     
-    List<SuspectAccount> accounts = new ArrayList<>();
+    CopyOnWriteArrayList<SuspectAccount> accounts = new CopyOnWriteArrayList<>();
     
     @Override
     public void updateAccountStatus(SuspectAccount suspectAccount) {
         SuspectAccount selected = null;
         for (SuspectAccount sa: accounts){
             if (sa.getAccountId().equals(suspectAccount.getAccountId())){
-                selected = sa;
+                sa.updateState(suspectAccount.getAmountOfSmallTransactions()+sa.getAmountOfSmallTransactions());
             }
         }
         if (selected == null){
             accounts.add(suspectAccount);
         }else{
-            selected.updateState(suspectAccount.getAmountOfSmallTransactions());
+            
         }
     }
 
